@@ -988,7 +988,7 @@ footer {
       </div>
     </div>
     <div data-r="r">
-      <form class="form" onsubmit="submitForm(event)">
+      <form class="form" action="https://formspree.io/f/mjgpyyql" method="POST">
         <div class="fg">
           <label>Name</label>
           <input type="text" placeholder="Your name" required/>
@@ -1099,16 +1099,7 @@ document.getElementById('copy-b').addEventListener('click', function() {
   });
 });
 
-// ── Contact form ──
-function submitForm(e) {
-  e.preventDefault();
-  const msg = document.getElementById('form-msg');
-  msg.textContent = 'Sending…';
-  setTimeout(() => {
-    msg.textContent = '✓ Received. This is a demo — email directly at sefat6050@gmail.com';
-    e.target.reset();
-  }, 1100);
-}
+
 </script>
 </body>
 </html>
