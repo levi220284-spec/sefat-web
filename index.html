@@ -586,7 +586,6 @@ footer {
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div style="display:flex;gap:.6rem;align-items:center">
-    <button class="dk-btn" id="dk-btn" title="Toggle dark mode">☀</button>
     <button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -596,7 +595,7 @@ footer {
   <div>
     <div class="hero-eyebrow">Dhaka, Bangladesh</div>
     <h1 class="hero-name">Md. Sefat<br><em>Ullah</em></h1>
-    <div class="hero-roles">CSE Undergraduate <span>·</span> Entrepreneur <span>·</span> Former Officer Cadet</div>
+    <div class="hero-roles">CSE Undergraduate <span>·</span> Millennium Fellow <span>·</span> Former Officer Cadet</div>
     <p class="hero-sub">Computer Science student at North South University with a background in maritime training. I compete in national and international case competitions, lead community initiatives for the UN Sustainable Development Goals, and build software projects along the way.</p>
     <div class="hero-cta">
       <a href="#competitions" class="btn btn-fill">My Journey</a>
@@ -1013,14 +1012,11 @@ window.addEventListener('scroll', () => {
   navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
 });
 
-// ── Dark mode ──
+// ── Permanent dark mode ──
 const dkBtn = document.getElementById('dk-btn');
-let dark = false;
-dkBtn.addEventListener('click', () => {
-  dark = !dark;
-  document.documentElement.setAttribute('data-dark', dark ? '1' : '0');
-  dkBtn.textContent = dark ? '🌙' : '☀';
-});
+
+document.documentElement.setAttribute('data-dark', '1');
+dkBtn.textContent = '🌙';
 
 // ── Hamburger ──
 const ham = document.getElementById('ham');
