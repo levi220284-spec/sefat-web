@@ -586,6 +586,7 @@ footer {
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div style="display:flex;gap:.6rem;align-items:center">
+    <button class="dk-btn" id="dk-btn" title="Toggle dark mode">☀</button>
     <button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -1012,11 +1013,14 @@ window.addEventListener('scroll', () => {
   navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
 });
 
-// ── Permanent dark mode ──
+// ── Dark mode ──
 const dkBtn = document.getElementById('dk-btn');
-
-document.documentElement.setAttribute('data-dark', '1');
-dkBtn.textContent = '🌙';
+let dark = false;
+dkBtn.addEventListener('click', () => {
+  dark = !dark;
+  document.documentElement.setAttribute('data-dark', dark ? '1' : '0');
+  dkBtn.textContent = dark ? '🌙' : '☀';
+});
 
 // ── Hamburger ──
 const ham = document.getElementById('ham');
