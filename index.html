@@ -315,6 +315,172 @@ footer a{text-decoration:none;color:var(--ink-2)}
   section{padding:72px 0}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============================================================
+   INTERACTION LAYER  (added on top — design unchanged)
+   ============================================================ */
+
+/* motion-safe wrapper: everything below only runs when the user
+   has NOT asked for reduced motion */
+@media (prefers-reduced-motion:no-preference){
+
+  /* ── magnetic buttons ── */
+  .btn,.clink,.iconbtn{will-change:transform}
+  .mag{transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .25s ease,border-color .2s ease}
+  .mag.grabbed{transition:transform .08s linear}
+
+  /* ── project card 3D ── */
+  .pcard{
+    transform-style:preserve-3d;
+    transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .25s ease;
+    box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 5%,transparent);
+  }
+  .pcard.tilting{transition:transform .12s linear,box-shadow .2s ease,border-color .25s ease}
+  .pcard .slot{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+  .pcard .slot img{transition:transform .6s cubic-bezier(.22,1,.36,1),filter .4s ease;transform-origin:center}
+  .pcard:hover .slot img{transform:scale(1.045);filter:saturate(1.05) contrast(1.02)}
+  .pcard .pbody{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+
+  /* view-project affordance (uses existing type + accent) */
+  .pcard .slot::after{
+    content:'VIEW PROJECT';
+    position:absolute;left:12px;bottom:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.14em;
+    background:var(--accent-2);color:#101014;padding:5px 9px;border-radius:var(--rad);
+    opacity:0;transform:translateY(8px);transition:opacity .3s ease,transform .35s cubic-bezier(.22,1,.36,1);
+    pointer-events:none;
+  }
+  .pcard:hover .slot::after{opacity:1;transform:none}
+
+  /* ── generic image depth (portrait, timeline, entries) ── */
+  .portrait .slot img,.tlrow .slot img,.entry .slot img{
+    transition:transform .6s cubic-bezier(.22,1,.36,1),filter .45s ease;
+  }
+  .portrait .slot:hover img,.entry .slot:hover img{transform:scale(1.035);filter:saturate(1.04)}
+  .tlrow:hover .slot img{transform:scale(1.03)}
+  .portrait .slot,.entry .slot,.tlrow .slot{transition:box-shadow .35s ease,border-color .25s ease}
+  .portrait .slot:hover,.entry .slot:hover{box-shadow:0 10px 26px -18px color-mix(in srgb,var(--ink) 60%,transparent)}
+
+  /* ── micro-interactions ── */
+  .topnav a{position:relative}
+  .topnav a::after{
+    content:'';position:absolute;left:11px;right:11px;bottom:3px;height:1px;
+    background:var(--accent);transform:scaleX(0);transform-origin:left;
+    transition:transform .28s cubic-bezier(.22,1,.36,1);
+  }
+  .topnav a:hover::after,.topnav a.on::after{transform:scaleX(1)}
+  .skill{transition:background .25s ease,transform .35s cubic-bezier(.22,1,.36,1),box-shadow .3s ease}
+  .skill:hover{transform:translateY(-2px);box-shadow:0 12px 24px -22px color-mix(in srgb,var(--ink) 70%,transparent)}
+  .skill .k{transition:letter-spacing .3s ease}
+  .skill:hover .k{letter-spacing:.18em}
+  .lang{transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .25s ease}
+  .lang:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .lang .bar i{transition:filter .3s ease}
+  .lang:hover .bar i{filter:brightness(1.15)}
+  .clink em{transition:transform .3s cubic-bezier(.22,1,.36,1);display:inline-block}
+  .clink:hover em{transform:translateX(3px)}
+  .iconbtn{transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .2s,color .2s}
+  .iconbtn:hover{transform:translateY(-2px)}
+  #top.on{transform:translateY(0)}
+  #top{transform:translateY(8px)}
+  .plinks a{position:relative;transition:color .2s ease}
+  .plinks a::after{
+    content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--accent);
+    transform:scaleX(0);transform-origin:right;transition:transform .3s cubic-bezier(.22,1,.36,1);
+  }
+  .plinks a:hover::after{transform:scaleX(1);transform-origin:left}
+  .entry{transition:border-color .25s ease,transform .4s cubic-bezier(.22,1,.36,1),box-shadow .35s ease}
+  .entry:hover{transform:translateY(-2px);box-shadow:0 16px 30px -28px color-mix(in srgb,var(--ink) 70%,transparent)}
+
+  /* ── refined reveal + stagger ── */
+  [data-rev]{transform:translateY(14px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);transition-delay:var(--rev-d,0ms)}
+
+  /* ── timeline focus ── */
+  .tlrow{transition:opacity .5s ease,transform .5s cubic-bezier(.22,1,.36,1)}
+  .tlrow .tlyear{transition:color .35s ease,transform .35s cubic-bezier(.22,1,.36,1),font-weight .2s}
+  .tlrow.active .tlyear{transform:translateX(3px);color:var(--accent);font-weight:500}
+  .tlrow.active{transform:translateX(2px)}
+  .tlrow::before{
+    content:'';position:absolute;left:-10px;top:26px;bottom:26px;width:2px;background:var(--accent);
+    opacity:0;transition:opacity .4s ease;
+  }
+  .tlrow{position:relative}
+  .tlrow.active::before{opacity:.75}
+
+  /* ── custom cursor (desktop only, injected by JS) ── */
+  html.has-cursor,html.has-cursor *{cursor:none!important}
+  #cur,#curRing{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%}
+  #cur{width:6px;height:6px;background:var(--accent);margin:-3px 0 0 -3px}
+  #curRing{
+    width:30px;height:30px;margin:-15px 0 0 -15px;border:1px solid color-mix(in srgb,var(--ink) 45%,transparent);
+    transition:width .22s ease,height .22s ease,margin .22s ease,border-color .22s ease,background .22s ease,border-radius .22s ease,opacity .2s ease;
+  }
+  html.cur-hover #curRing{width:44px;height:44px;margin:-22px 0 0 -22px;border-color:var(--accent)}
+  html.cur-card #curRing{
+    width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:var(--rad);
+    border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent);
+  }
+  html.cur-hidden #cur,html.cur-hidden #curRing{opacity:0}
+}
+
+/* ── command palette (works with or without motion) ── */
+#pal{
+  position:fixed;inset:0;z-index:9500;display:none;
+  align-items:flex-start;justify-content:center;padding:14vh 20px 20px;
+  background:color-mix(in srgb,var(--ink) 32%,transparent);backdrop-filter:blur(6px);
+}
+#pal.open{display:flex}
+.palbox{
+  width:100%;max-width:520px;background:var(--panel);border:1px solid var(--line);
+  border-radius:var(--rad);overflow:hidden;
+  box-shadow:0 30px 60px -30px color-mix(in srgb,#000 70%,transparent);
+}
+.palbox input{
+  width:100%;border:none;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);
+  font-family:'Archivo',sans-serif;font-size:1rem;padding:16px 18px;outline:none;
+}
+.palbox input::placeholder{color:var(--ink-3)}
+.pallist{list-style:none;max-height:52vh;overflow:auto}
+.pallist li{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  padding:13px 18px;cursor:pointer;font-size:.92rem;font-weight:600;border-bottom:1px solid var(--line);
+}
+.pallist li:last-child{border-bottom:none}
+.pallist li em{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.pallist li[aria-selected="true"]{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.pallist li[aria-selected="true"] em{color:var(--accent)}
+.palfoot{
+  display:flex;gap:14px;padding:10px 18px;border-top:1px solid var(--line);
+  font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+}
+
+/* ── form states ── */
+.formnote{
+  font-family:'IBM Plex Mono',monospace;font-size:.66rem;letter-spacing:.08em;
+  padding:11px 13px;border:1px solid var(--line);border-radius:var(--rad);display:none;
+}
+.formnote.show{display:block}
+.formnote.ok{border-color:var(--accent);color:var(--accent)}
+.formnote.err{border-color:#d8402f;color:#d8402f}
+button.btn[aria-busy="true"]{opacity:.65;pointer-events:none}
+
+/* ── touch / tablet tuning ── */
+@media (hover:none){
+  #cur,#curRing{display:none!important}
+  .pcard .slot::after{opacity:1;transform:none}
+  .pcard:active{transform:scale(.995)}
+  .entry:active,.skill:active,.lang:active{transform:scale(.995)}
+}
+@media (max-width:1100px) and (min-width:961px){
+  .pcard{transition-duration:.35s}
+}
+@media (max-width:960px){
+  #pal{padding:8vh 16px 16px}
+  .btn{min-height:46px;display:inline-flex;align-items:center}
+  .iconbtn{width:40px;height:40px}
+}
+html,body{max-width:100%}
+
 </style>
 </head>
 <body>
@@ -654,6 +820,208 @@ const io = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
 }, {threshold:0.12});
 document.querySelectorAll('[data-rev]').forEach(el => io.observe(el));
+
+/* ============================================================
+   INTERACTION LAYER — JS (additive, nothing above is replaced)
+   ============================================================ */
+(function(){
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const reduce = () => mq.matches;
+  const fine  = () => window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const tablet= () => window.innerWidth <= 1100;
+
+  /* ── 1. reveal stagger (enhances the existing reveal system) ── */
+  document.querySelectorAll('.projects,.skills,.dossier,.tl,.langs,.clinks,.factbar').forEach(group=>{
+    [...group.children].forEach((child,i)=>{
+      const t = child.matches('[data-rev]') ? child : child.querySelector('[data-rev]');
+      (t||child).style.setProperty('--rev-d', Math.min(i*70,420)+'ms');
+    });
+  });
+
+  /* ── 2. magnetic buttons ── */
+  const magnets = document.querySelectorAll('.btn, .plinks a, #top, .iconbtn');
+  magnets.forEach(el=>el.classList.add('mag'));
+  let magRaf = null, magQueue = new Map();
+  function flushMag(){
+    magRaf = null;
+    magQueue.forEach((v,el)=>{ el.style.transform = v; });
+    magQueue.clear();
+  }
+  function queueMag(el,v){ magQueue.set(el,v); if(!magRaf) magRaf = requestAnimationFrame(flushMag); }
+
+  if (fine()){
+    magnets.forEach(el=>{
+      const strength = el.classList.contains('btn') ? 0.28 : 0.2;
+      el.addEventListener('pointermove', e=>{
+        if (reduce() || !fine()) return;
+        const r = el.getBoundingClientRect();
+        const k = tablet() ? 0.5 : 1;
+        const x = (e.clientX - (r.left + r.width/2)) * strength * k;
+        const y = (e.clientY - (r.top + r.height/2)) * strength * k;
+        el.classList.add('grabbed');
+        queueMag(el, `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px)`);
+      });
+      el.addEventListener('pointerleave', ()=>{
+        el.classList.remove('grabbed');
+        queueMag(el, '');
+      });
+    });
+  }
+
+  /* ── 3. project card 3D tilt ── */
+  document.querySelectorAll('.pcard').forEach(card=>{
+    const slot = card.querySelector('.slot');
+    const body = card.querySelector('.pbody');
+    let raf = null, tx = 0, ty = 0;
+    function apply(){
+      raf = null;
+      const max = tablet() ? 1.2 : 2.4;
+      const rx = (-ty * max).toFixed(2), ry = (tx * max).toFixed(2);
+      card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+      card.style.boxShadow = `${(-tx*10).toFixed(1)}px ${(14 - ty*8).toFixed(1)}px 30px -22px color-mix(in srgb, var(--ink) 80%, transparent)`;
+      if (slot) slot.style.transform = `translate3d(${(-tx*6).toFixed(1)}px, ${(-ty*5).toFixed(1)}px, 0)`;
+      if (body) body.style.transform = `translate3d(${(tx*2.5).toFixed(1)}px, ${(ty*2).toFixed(1)}px, 0)`;
+    }
+    card.addEventListener('pointermove', e=>{
+      if (reduce() || !fine()) return;
+      const r = card.getBoundingClientRect();
+      tx = (e.clientX - (r.left + r.width/2)) / (r.width/2);
+      ty = (e.clientY - (r.top + r.height/2)) / (r.height/2);
+      card.classList.add('tilting');
+      if (!raf) raf = requestAnimationFrame(apply);
+    });
+    card.addEventListener('pointerleave', ()=>{
+      card.classList.remove('tilting');
+      card.style.transform = '';
+      card.style.boxShadow = '';
+      if (slot) slot.style.transform = '';
+      if (body) body.style.transform = '';
+    });
+  });
+
+  /* ── 4. custom cursor (desktop, fine pointer only) ── */
+  if (fine() && !reduce()){
+    const dot = document.createElement('div'); dot.id = 'cur';
+    const ring = document.createElement('div'); ring.id = 'curRing';
+    document.body.append(dot, ring);
+    document.documentElement.classList.add('has-cursor');
+    let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, run = false;
+    function loop(){
+      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      if (Math.abs(mx-rx) > 0.1 || Math.abs(my-ry) > 0.1){ requestAnimationFrame(loop); } else { run = false; }
+    }
+    document.addEventListener('pointermove', e=>{
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px)`;
+      if (!run){ run = true; requestAnimationFrame(loop); }
+    }, {passive:true});
+    document.addEventListener('pointerover', e=>{
+      const t = e.target;
+      const card = t.closest && t.closest('.pcard');
+      const hot  = t.closest && t.closest('a,button,input,textarea,.skill,.lang,.entry');
+      document.documentElement.classList.toggle('cur-card', !!card);
+      document.documentElement.classList.toggle('cur-hover', !card && !!hot);
+    });
+    document.addEventListener('mouseleave', ()=>document.documentElement.classList.add('cur-hidden'));
+    document.addEventListener('mouseenter', ()=>document.documentElement.classList.remove('cur-hidden'));
+    window.addEventListener('blur', ()=>document.documentElement.classList.add('cur-hidden'));
+  }
+
+  /* ── 5. interactive timeline ── */
+  const rows = [...document.querySelectorAll('.tlrow')];
+  if (rows.length && 'IntersectionObserver' in window){
+    const tio = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{ en.target.classList.toggle('active', en.isIntersecting && en.intersectionRatio > 0.45); });
+    }, {threshold:[0, .45, .8], rootMargin:'-15% 0px -25% 0px'});
+    rows.forEach(r=>tio.observe(r));
+  }
+
+  /* ── 6. command palette (Ctrl/Cmd + K) ── */
+  const items = [
+    ['About','#about','01'], ['Education','#education','02'], ['Skills','#skills','03'],
+    ['Projects','#projects','04'], ['Competitions & Leadership','#competitions','05'],
+    ['Languages','#languages','06'], ['Contact','#contact','07']
+  ];
+  const pal = document.createElement('div');
+  pal.id = 'pal'; pal.setAttribute('role','dialog'); pal.setAttribute('aria-modal','true'); pal.hidden = false;
+  pal.innerHTML = `<div class="palbox">
+      <input id="palq" type="text" placeholder="Jump to a section…" aria-label="Search sections" autocomplete="off"/>
+      <ul class="pallist" id="pallist" role="listbox"></ul>
+      <div class="palfoot"><span>↑↓ navigate</span><span>↵ open</span><span>esc close</span></div>
+    </div>`;
+  document.body.appendChild(pal);
+  const q = pal.querySelector('#palq'), list = pal.querySelector('#pallist');
+  let cursor = 0, shown = items;
+
+  function render(filter){
+    shown = items.filter(i => i[0].toLowerCase().includes(filter.trim().toLowerCase()));
+    cursor = 0;
+    list.innerHTML = shown.map((i,idx)=>
+      `<li role="option" data-href="${i[1]}" aria-selected="${idx===0}"><span>${i[0]}</span><em>${i[2]}</em></li>`
+    ).join('') || `<li role="option" aria-selected="false"><span>No match</span><em>—</em></li>`;
+  }
+  function mark(){ [...list.children].forEach((li,i)=>li.setAttribute('aria-selected', i===cursor)); }
+  function openPal(){ render(''); pal.classList.add('open'); q.value=''; q.focus(); }
+  function closePal(){ pal.classList.remove('open'); }
+  function go(href){
+    if (!href) return;
+    closePal();
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({behavior: reduce() ? 'auto' : 'smooth', block:'start'});
+  }
+  q.addEventListener('input', ()=>render(q.value));
+  list.addEventListener('click', e=>{ const li = e.target.closest('li'); if (li) go(li.dataset.href); });
+  list.addEventListener('pointermove', e=>{ const li = e.target.closest('li'); if (li){ cursor = [...list.children].indexOf(li); mark(); } });
+  document.addEventListener('keydown', e=>{
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); pal.classList.contains('open') ? closePal() : openPal(); return; }
+    if (!pal.classList.contains('open')) return;
+    if (e.key === 'Escape'){ e.preventDefault(); closePal(); }
+    else if (e.key === 'ArrowDown'){ e.preventDefault(); cursor = Math.min(cursor+1, list.children.length-1); mark(); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); cursor = Math.max(cursor-1, 0); mark(); }
+    else if (e.key === 'Enter'){ e.preventDefault(); const li = list.children[cursor]; if (li) go(li.dataset.href); }
+  });
+  pal.addEventListener('click', e=>{ if (e.target === pal) closePal(); });
+
+  /* ── 7. contact form feedback (same Formspree endpoint) ── */
+  const form = document.querySelector('form[action*="formspree"]');
+  if (form){
+    const btn = form.querySelector('button[type="submit"]');
+    const label = btn ? btn.textContent : 'Send message';
+    const note = document.createElement('div');
+    note.className = 'formnote'; note.setAttribute('role','status'); note.setAttribute('aria-live','polite');
+    form.appendChild(note);
+    let busy = false;
+    form.addEventListener('submit', async e=>{
+      e.preventDefault();
+      if (busy) return;
+      busy = true;
+      if (btn){ btn.setAttribute('aria-busy','true'); btn.textContent = 'Sending…'; }
+      note.className = 'formnote show'; note.textContent = 'Sending your message…';
+      try{
+        const res = await fetch(form.action, {
+          method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}
+        });
+        if (res.ok){
+          note.className = 'formnote show ok';
+          note.textContent = 'Message sent. I will get back to you soon.';
+          form.reset();
+        } else {
+          const data = await res.json().catch(()=>({}));
+          note.className = 'formnote show err';
+          note.textContent = (data.errors && data.errors[0] && data.errors[0].message) || 'Could not send. Please email sefat6050@gmail.com.';
+        }
+      } catch(err){
+        note.className = 'formnote show err';
+        note.textContent = 'Network error. Please email sefat6050@gmail.com.';
+      } finally {
+        busy = false;
+        if (btn){ btn.removeAttribute('aria-busy'); btn.textContent = label; }
+      }
+    });
+  }
+})();
+
 </script>
 </body>
 </html>
